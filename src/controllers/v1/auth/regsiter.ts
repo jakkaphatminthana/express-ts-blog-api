@@ -1,8 +1,8 @@
-import bcrypt from 'bcrypt';
 import { logger } from '@/lib/winston';
 import User, { IUser } from '@/models/user';
 import { genUsername } from '@/utils';
 import type { Request, Response } from 'express';
+import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
 
 type UserData = Pick<IUser, 'email' | 'password' | 'role'>;
 
@@ -11,22 +11,34 @@ const register = async (req: Request, res: Response): Promise<void> => {
 
   try {
     const username = genUsername();
-    const hashedPassword = await bcrypt.hashSync(password, 10); //saltRounds = 10
 
     const newUser = await User.create({
       username,
       email,
-      password: hashedPassword,
+      password,
       role,
     });
 
+    // generate access & refresh token
+    const accessToken = generateAccessToken(newUser._id);
+    const refreshToken = generateRefreshToken(newUser._id);
+
+    // res.cookie('refreshToken', refreshToken, {
+    //   httpOnly: true,
+    //   secure: config.NODE_ENV === 'production',
+    //   sameSite: 'strict',
+    // });
+
     res.status(201).json({
+      accessToken,
+      refreshToken,
       user: {
         username: newUser.username,
         email: newUser.email,
         role: newUser.role,
       },
     });
+    logger.info('register successful');
   } catch (error) {
     res.status(500).json({
       code: 'ServerError',
