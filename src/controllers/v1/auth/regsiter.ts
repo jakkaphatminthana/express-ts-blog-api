@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { logger } from '@/lib/winston';
 import User, { IUser } from '@/models/user';
 import { genUsername } from '@/utils';
@@ -10,8 +11,14 @@ const register = async (req: Request, res: Response): Promise<void> => {
 
   try {
     const username = genUsername();
+    const hashedPassword = await bcrypt.hashSync(password, 10); //saltRounds = 10
 
-    const newUser = await User.create({ username, email, password, role });
+    const newUser = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+      role,
+    });
 
     res.status(201).json({
       user: {
