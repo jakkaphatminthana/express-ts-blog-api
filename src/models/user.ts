@@ -84,11 +84,10 @@ const userSchema = new Schema<IUser>(
   { timestamps: true },
 );
 
-// hash password
+// on create
 userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
-    next();
-    return;
+  if (!this.isModified('password')) {
+    return next();
   }
 
   this.password = await bcrypt.hash(this.password, 10);
