@@ -7,7 +7,7 @@ import helmet from 'helmet';
 import type { CorsOptions } from 'cors';
 
 import config from '@/config';
-import limiter from '@/lib/express_rate_limit';
+import limiter from '@/lib/express-rate-limit';
 import { connectToDatabase, disconnectFromDatabase } from '@/lib/mongoose';
 import { logger } from '@/lib/winston';
 import v1Routes from '@/routes/v1/index';

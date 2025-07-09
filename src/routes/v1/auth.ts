@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
-import validationError from '@/middlewares/validationError';
-import { loginValidator, registerValidator } from '@/validators/authValidator';
+import validationError from '@/middlewares/validation-error';
+import { loginValidator, registerValidator } from '@/validators/auth-validator';
 
 import login from '@/controllers/v1/auth/login';
 import register from '@/controllers/v1/auth/regsiter';
