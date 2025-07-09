@@ -1,8 +1,11 @@
 import { logger } from '@/lib/winston';
-import User, { IUser } from '@/models/user';
 import { genUsername } from '@/utils';
 import type { Request, Response } from 'express';
+
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
+
+import Token from '@/models/token';
+import User, { IUser } from '@/models/user';
 
 type UserData = Pick<IUser, 'email' | 'password' | 'role'>;
 
@@ -22,6 +25,13 @@ const register = async (req: Request, res: Response): Promise<void> => {
     // generate access & refresh token
     const accessToken = generateAccessToken(newUser._id);
     const refreshToken = generateRefreshToken(newUser._id);
+
+    // Store token to databased
+    await Token.create({ token: refreshToken, userId: newUser._id });
+    logger.info('Refresh token created for user', {
+      userId: newUser._id,
+      token: refreshToken,
+    });
 
     // res.cookie('refreshToken', refreshToken, {
     //   httpOnly: true,
