@@ -6,11 +6,22 @@ import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
 
 import Token from '@/models/token';
 import User, { IUser } from '@/models/user';
+import config from '@/config';
 
 type UserData = Pick<IUser, 'email' | 'password' | 'role'>;
 
 const register = async (req: Request, res: Response): Promise<void> => {
   const { email, password, role } = req.body as UserData;
+
+  // Check whitelist admin
+  if (role === 'admin' && !config.WHITELIST_ADMINS_MAIL.includes(email)) {
+    res.status(403).json({
+      code: 'AuthorizationError',
+      message: 'You cannot register as an admin',
+    });
+    logger.warn(`User with email ${email} tried to register as an admin`);
+    return;
+  }
 
   try {
     const username = genUsername();
