@@ -8,6 +8,7 @@ import Token from '@/models/token';
 import User, { IUser } from '@/models/user';
 import config from '@/config';
 import { USER_ROLE } from '@/types/enums';
+import { sendError } from '@/utils/http-error';
 
 type UserData = Pick<IUser, 'email' | 'password' | 'role'>;
 
@@ -19,10 +20,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
     role === USER_ROLE.Admin &&
     !config.WHITELIST_ADMINS_MAIL.includes(email)
   ) {
-    res.status(403).json({
-      code: 'AuthorizationError',
-      message: 'You cannot register as an admin',
-    });
+    sendError.forbidden(res, 'You cannot register as an admin');
     logger.warn(`User with email ${email} tried to register as an admin`);
     return;
   }
@@ -65,11 +63,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
     });
     logger.info('register successful');
   } catch (error) {
-    res.status(500).json({
-      code: 'ServerError',
-      message: 'InternalServerError',
-      error: error,
-    });
+    sendError.internalServer(res, error);
     logger.error('Error during user registeration, ', error);
   }
 };

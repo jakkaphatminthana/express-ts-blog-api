@@ -5,6 +5,7 @@ import User, { IUser } from '@/models/user';
 import Token from '@/models/token';
 
 import type { Request, Response } from 'express';
+import { sendError } from '@/utils/http-error';
 
 type UserData = Pick<IUser, 'email' | 'password'>;
 
@@ -18,10 +19,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
       .exec();
 
     if (!user) {
-      res.status(401).json({
-        code: 'AuthorizationError',
-        message: 'Email or password is invalid',
-      });
+      sendError.unauthorized(res, 'Email or password is invalid');
       return;
     }
 
@@ -53,11 +51,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
     });
     logger.info('Login successful');
   } catch (error) {
-    res.status(500).json({
-      code: 'ServerError',
-      message: 'InternalServerError',
-      error: error,
-    });
+    sendError.internalServer(res, error);
     logger.error('Error during user login, ', error);
   }
 };
