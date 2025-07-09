@@ -1,11 +1,12 @@
 import { model, Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
+import { USER_ROLE } from '@/types/enums';
 
 export interface IUser {
   username: string;
   email: string;
   password: string;
-  role: 'admin' | 'user';
+  role: USER_ROLE;
   firstname?: string;
   lastname?: string;
   socialLinks?: {
@@ -41,10 +42,10 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: [true, 'role is required'],
       enum: {
-        values: ['admin', 'user'],
+        values: Object.values(USER_ROLE),
         message: '{VALUE} is not supported',
       },
-      default: 'user',
+      default: USER_ROLE.User,
     },
     firstname: {
       type: String,
