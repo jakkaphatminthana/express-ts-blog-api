@@ -21,7 +21,7 @@ if (config.NODE_ENV !== 'production') {
             : '';
 
           // final log output format
-          return `${timestamp} [${level.toUpperCase()}]: ${message}${metaStr}`;
+          return `${timestamp} [${level}]: ${message}${metaStr}`;
         }),
       ),
     }),
