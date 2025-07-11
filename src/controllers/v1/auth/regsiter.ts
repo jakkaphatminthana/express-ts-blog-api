@@ -1,33 +1,42 @@
-import { logger } from '@/lib/winston';
-import { genUsername } from '@/utils';
 import type { Request, Response } from 'express';
 
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
+import { logger } from '@/lib/winston';
 
-import Token from '@/models/token';
-import User, { IUser } from '@/models/user';
 import config from '@/config';
 import { USER_ROLE } from '@/types/enums';
 import { sendError } from '@/utils/http-error';
+import { genUsername } from '@/utils';
+// import { RegisterSchemaType } from '@/validators/auth-validator';
+
+import Token from '@/models/token';
+import User, { IUser } from '@/models/user';
 
 type UserData = Pick<IUser, 'email' | 'password' | 'role'>;
 
 const register = async (req: Request, res: Response): Promise<void> => {
   const { email, password, role } = req.body as UserData;
-
-  // Check whitelist admin
-  if (
-    role === USER_ROLE.Admin &&
-    !config.WHITELIST_ADMINS_MAIL.includes(email)
-  ) {
-    sendError.forbidden(res, 'You cannot register as an admin');
-    logger.warn(`User with email ${email} tried to register as an admin`);
-    return;
-  }
+  // const { email, password, role } = req.body as RegisterSchemaType;
 
   try {
-    const username = genUsername();
+    // Check email exists
+    const userExists = await User.exists({ email });
+    if (userExists) {
+      sendError.badRequest(res, 'Email or password is invalid');
+    }
 
+    // Check whitelist admin
+    if (
+      role === USER_ROLE.Admin &&
+      !config.WHITELIST_ADMINS_MAIL.includes(email)
+    ) {
+      sendError.forbidden(res, 'You cannot register as an admin');
+      logger.warn(`User with email ${email} tried to register as an admin`);
+      return;
+    }
+
+    // Create User on database
+    const username = genUsername();
     const newUser = await User.create({
       username,
       email,
@@ -35,7 +44,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
       role,
     });
 
-    // generate access & refresh token
+    // Generate access & refresh token
     const accessToken = generateAccessToken(newUser._id);
     const refreshToken = generateRefreshToken(newUser._id);
 

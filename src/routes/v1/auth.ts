@@ -9,6 +9,8 @@ import register from '@/controllers/v1/auth/regsiter';
 const router = Router();
 
 router.post('/register', registerValidator, validationError, register);
+// router.post('/register', validationError(RegisterSchema, 'body'), register);
+
 router.post('/login', loginValidator, validationError, login);
 
 export default router;
