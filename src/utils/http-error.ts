@@ -20,6 +20,12 @@ export const sendError = {
       message,
     });
   },
+  notFound(res: Response, message = 'NotFound') {
+    return res.status(404).json({
+      code: 'NotFoundError',
+      message,
+    });
+  },
   internalServer(
     res: Response,
     error: unknown,
