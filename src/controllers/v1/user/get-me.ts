@@ -3,7 +3,7 @@ import { sendError } from '@/utils/http-error';
 import { Request, Response } from 'express';
 import User from '@/models/user';
 
-const getUserMe = async (req: Request, res: Response): Promise<void> => {
+const getMe = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = req.userId;
 
@@ -21,4 +21,4 @@ const getUserMe = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export default getUserMe;
+export default getMe;
