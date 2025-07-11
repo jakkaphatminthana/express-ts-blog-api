@@ -30,3 +30,9 @@ export const LoginSchema = z.object({
     .min(8, { message: 'Password must be at least 8 characters' }),
 });
 export type LoginSchemaType = z.infer<typeof LoginSchema>;
+
+// Refresh token
+export const RefreshTokenSchema = z.object({
+  token: z.string({ message: 'Token is required' }),
+});
+export type RefreshTokenSchemaType = z.infer<typeof RefreshTokenSchema>;
