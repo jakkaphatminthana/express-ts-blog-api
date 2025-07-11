@@ -23,6 +23,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
     const userExists = await User.exists({ email });
     if (userExists) {
       sendError.badRequest(res, 'Email or password is invalid');
+      return;
     }
 
     // Check whitelist admin

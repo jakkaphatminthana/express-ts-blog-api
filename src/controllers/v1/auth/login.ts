@@ -1,24 +1,33 @@
+import bcrypt from 'bcrypt';
+import type { Request, Response } from 'express';
+
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
 import { logger } from '@/lib/winston';
+import { sendError } from '@/utils/http-error';
 
 import User, { IUser } from '@/models/user';
 import Token from '@/models/token';
-
-import type { Request, Response } from 'express';
-import { sendError } from '@/utils/http-error';
 
 type UserData = Pick<IUser, 'email' | 'password'>;
 
 const login = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email } = req.body as UserData;
+    const { email, password } = req.body as UserData;
 
+    // Check user exists
     const user = await User.findOne({ email })
       .select('username email password role')
       .lean()
       .exec();
 
     if (!user) {
+      sendError.unauthorized(res, 'Email or password is invalid');
+      return;
+    }
+
+    // Check password match
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
       sendError.unauthorized(res, 'Email or password is invalid');
       return;
     }
