@@ -5,14 +5,13 @@ import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
 import { logger } from '@/lib/winston';
 import { sendError } from '@/utils/http-error';
 
-import User, { IUser } from '@/models/user';
+import User from '@/models/user';
 import Token from '@/models/token';
-
-type UserData = Pick<IUser, 'email' | 'password'>;
+import { LoginSchemaType } from '@/validators/auth.validator';
 
 const login = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password } = req.body as UserData;
+    const { email, password } = req.body as LoginSchemaType;
 
     // Check user exists
     const user = await User.findOne({ email })
@@ -29,6 +28,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       sendError.unauthorized(res, 'Email or password is invalid');
+      logger.warn(`Password not match`);
       return;
     }
 

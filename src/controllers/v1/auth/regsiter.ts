@@ -7,22 +7,20 @@ import config from '@/config';
 import { USER_ROLE } from '@/types/enums';
 import { sendError } from '@/utils/http-error';
 import { genUsername } from '@/utils';
-// import { RegisterSchemaType } from '@/validators/auth-validator';
+import { RegisterSchemaType } from '@/validators/auth.validator';
 
 import Token from '@/models/token';
-import User, { IUser } from '@/models/user';
-
-type UserData = Pick<IUser, 'email' | 'password' | 'role'>;
+import User from '@/models/user';
 
 const register = async (req: Request, res: Response): Promise<void> => {
-  const { email, password, role } = req.body as UserData;
-  // const { email, password, role } = req.body as RegisterSchemaType;
-
   try {
+    const { email, password, role } = req.body as RegisterSchemaType;
+
     // Check email exists
     const userExists = await User.exists({ email });
     if (userExists) {
       sendError.badRequest(res, 'Email or password is invalid');
+      logger.warn(`This email "${email}" is already exists`);
       return;
     }
 
