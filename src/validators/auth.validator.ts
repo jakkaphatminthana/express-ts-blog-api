@@ -36,3 +36,9 @@ export const RefreshTokenSchema = z.object({
   token: z.string({ message: 'Token is required' }),
 });
 export type RefreshTokenSchemaType = z.infer<typeof RefreshTokenSchema>;
+
+// Logout
+export const LogoutSchema = z.object({
+  refreshToken: z.string({ message: 'refreshToken is required' }),
+});
+export type LogoutSchemaType = z.infer<typeof LogoutSchema>;
