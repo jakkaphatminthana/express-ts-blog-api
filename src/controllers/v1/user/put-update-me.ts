@@ -1,8 +1,10 @@
+import type { Request, Response } from 'express';
+
 import { logger } from '@/lib/winston';
-import User from '@/models/user';
 import { sendError } from '@/utils/http-error';
 import { UserUpdateSchemaType } from '@/validators/user.validator';
-import type { Request, Response } from 'express';
+
+import User from '@/models/user';
 
 const updateMe = async (req: Request, res: Response): Promise<void> => {
   const userId = req.userId;

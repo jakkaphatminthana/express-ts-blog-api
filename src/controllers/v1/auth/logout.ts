@@ -5,7 +5,6 @@ import { sendError } from '@/utils/http-error';
 import { LogoutSchemaType } from '@/validators/auth.validator';
 
 import Token from '@/models/token';
-import { verifyRefreshToken } from '@/lib/jwt';
 
 const logout = async (req: Request, res: Response): Promise<void> => {
   try {
