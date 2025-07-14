@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { USER_ROLE } from '@/types/enums';
+import { USER_ROLE } from '@/types/core.enums';
 
 import authorize from '@/middlewares/authorize';
 import authenticate from '@/middlewares/authenticate';

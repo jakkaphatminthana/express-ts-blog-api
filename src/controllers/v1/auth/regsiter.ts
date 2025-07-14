@@ -4,7 +4,7 @@ import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
 import { logger } from '@/lib/winston';
 
 import config from '@/config';
-import { USER_ROLE } from '@/types/enums';
+import { USER_ROLE } from '@/types/core.enums';
 import { sendError } from '@/utils/http-error';
 import { genUsername } from '@/utils';
 import { RegisterSchemaType } from '@/validators/auth.validator';
