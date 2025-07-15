@@ -1,4 +1,5 @@
 import z from 'zod';
+import { PaginationSchema } from './core.validator';
 
 const socialLinkSchema = z
   .string()
@@ -6,6 +7,7 @@ const socialLinkSchema = z
   .max(100, { message: 'must be less than 100 characters' })
   .optional();
 
+// User update
 export const UserUpdateSchema = z.object({
   username: z
     .string()
@@ -33,5 +35,8 @@ export const UserUpdateSchema = z.object({
   x: socialLinkSchema,
   youtube: socialLinkSchema,
 });
-
 export type UserUpdateSchemaType = z.infer<typeof UserUpdateSchema>;
+
+// Get Users
+export const UsersSchema = PaginationSchema.extend({});
+export type UsersSchemaType = z.infer<typeof UsersSchema>;

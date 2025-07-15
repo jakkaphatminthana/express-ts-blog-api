@@ -6,11 +6,12 @@ import authorize from '@/middlewares/authorize';
 import authenticate from '@/middlewares/authenticate';
 import validationError from '@/middlewares/validation-error';
 
-import getCurrentUser from '@/controllers/v1/user/get-me';
-import updateMe from '@/controllers/v1/user/put-update-me';
+import { UsersSchema, UserUpdateSchema } from '@/validators/user.validator';
 
-import { UserUpdateSchema } from '@/validators/user.validator';
+import getMe from '@/controllers/v1/user/get-me';
+import updateMe from '@/controllers/v1/user/put-update-me';
 import deleteMe from '@/controllers/v1/user/delete.me';
+import getUsers from '@/controllers/v1/user/get-users';
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.get(
   '/me',
   authenticate,
   authorize([USER_ROLE.Admin, USER_ROLE.User]),
-  getCurrentUser,
+  getMe,
 );
 router.put(
   '/me',
@@ -32,6 +33,14 @@ router.delete(
   authenticate,
   authorize([USER_ROLE.Admin, USER_ROLE.User]),
   deleteMe,
+);
+
+router.get(
+  '/',
+  authenticate,
+  authorize([USER_ROLE.Admin]),
+  validationError(UsersSchema, 'query'),
+  getUsers,
 );
 
 export default router;
