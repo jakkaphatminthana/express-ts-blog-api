@@ -13,6 +13,7 @@ import updateMe from '@/controllers/v1/user/put-update-me';
 import deleteMe from '@/controllers/v1/user/delete.me';
 import getUsers from '@/controllers/v1/user/get-users';
 import getUser from '@/controllers/v1/user/get-user';
+import deleteUser from '@/controllers/v1/user/delete.user';
 
 const router = Router();
 
@@ -43,7 +44,12 @@ router.get(
   validationError(UsersSchema, 'query'),
   getUsers,
 );
-
 router.get('/:userId', authenticate, authorize([USER_ROLE.Admin]), getUser);
+router.delete(
+  '/:userId',
+  authenticate,
+  authorize([USER_ROLE.Admin]),
+  deleteUser,
+);
 
 export default router;
