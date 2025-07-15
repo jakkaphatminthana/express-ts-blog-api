@@ -20,7 +20,7 @@ function validationError(
       return;
     }
 
-    req[source] = result.data;
+    Object.assign(req[source], result.data);
     next();
   };
 }
