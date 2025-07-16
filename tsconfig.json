@@ -13,7 +13,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "typeRoots": ["./src/@types"]
+    "typeRoots": ["./src/types/express"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

@@ -1,3 +1,4 @@
+import { HttpError } from '@/types/core.error';
 import type { Response } from 'express';
 
 export const sendError = {
@@ -31,6 +32,15 @@ export const sendError = {
     error: unknown,
     message = 'InternalServerError',
   ) {
+    // Error from throw HttpError
+    if (error instanceof HttpError) {
+      return res.status(error.statusCode).json({
+        code: error.code,
+        message: error.message,
+        errors: error.errors ?? {},
+      });
+    }
+
     const parsedErrors = parseMongooseError(error);
     if (parsedErrors) {
       return this.badRequest(res, 'Validation failed', parsedErrors);
