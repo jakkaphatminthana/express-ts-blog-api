@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { USER_ROLE } from '@/types/core.enums';
 
@@ -18,6 +18,8 @@ export interface IUser {
     youtube?: string;
   };
 }
+
+export type UserDocument = Document & IUser;
 
 const userSchema = new Schema<IUser>(
   {

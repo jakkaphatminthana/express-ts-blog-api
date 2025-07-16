@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import validationError from '@/middlewares/validation-error';
+import authenticate from '@/middlewares/authenticate';
 import {
   LoginSchema,
   LogoutSchema,
@@ -8,11 +9,12 @@ import {
   RegisterSchema,
 } from '@/validators/auth.validator';
 
-import login from '@/controllers/v1/auth/login';
-import register from '@/controllers/v1/auth/regsiter';
-import refreshToken from '@/controllers/v1/auth/refresh-token';
-import authenticate from '@/middlewares/authenticate';
-import logout from '@/controllers/v1/auth/logout';
+import {
+  login,
+  register,
+  refreshToken,
+  logout,
+} from '@/controllers/v1/auth.controller';
 
 const router = Router();
 
