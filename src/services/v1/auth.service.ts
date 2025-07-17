@@ -4,8 +4,7 @@ import mongoose, { Types } from 'mongoose';
 import config from '@/config';
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
 import { logger } from '@/lib/winston';
-
-import { USER_ROLE } from '@/types/core.enums';
+import { USER_ROLE } from '@/constants/enums';
 import { createError } from '@/types/core.error';
 import {
   LoginSchemaType,

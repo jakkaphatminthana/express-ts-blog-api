@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 
 import { genUsername } from '@/utils';
 import { logger } from '@/lib/winston';
-import { PAGE, PAGE_SIZE } from '@/types/core.constants';
+import { PAGE, PAGE_SIZE } from '@/constants';
 import { Pagination } from '@/types/core.types';
 import { createError } from '@/types/core.error';
 

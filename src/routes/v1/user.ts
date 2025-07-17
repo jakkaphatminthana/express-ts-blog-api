@@ -4,7 +4,7 @@ import authorize from '@/middlewares/authorize';
 import authenticate from '@/middlewares/authenticate';
 import validationError from '@/middlewares/validation-error';
 
-import { USER_ROLE } from '@/types/core.enums';
+import { USER_ROLE } from '@/constants/enums';
 import { UsersSchema, UserUpdateSchema } from '@/validators/user.validator';
 import {
   deleteMe,

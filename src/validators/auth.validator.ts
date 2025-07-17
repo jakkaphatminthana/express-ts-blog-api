@@ -1,6 +1,5 @@
 import z from 'zod';
-
-import { USER_ROLE } from '@/types/core.enums';
+import { USER_ROLE } from '@/constants/enums';
 
 // Register
 export const RegisterSchema = z.object({

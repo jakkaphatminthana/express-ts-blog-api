@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import { logger } from '@/lib/winston';
 import { sendError } from '@/utils/http-error';
-import { USER_ROLE } from '@/types/core.enums';
+import { USER_ROLE } from '@/constants/enums';
 
 import User from '@/models/user';
 

@@ -1,6 +1,6 @@
 import { model, Schema, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { USER_ROLE } from '@/types/core.enums';
+import { USER_ROLE } from '@/constants/enums';
 
 export interface IUser {
   username: string;
