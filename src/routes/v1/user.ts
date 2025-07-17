@@ -1,19 +1,19 @@
 import { Router } from 'express';
 
-import { USER_ROLE } from '@/types/core.enums';
-
 import authorize from '@/middlewares/authorize';
 import authenticate from '@/middlewares/authenticate';
 import validationError from '@/middlewares/validation-error';
 
+import { USER_ROLE } from '@/types/core.enums';
 import { UsersSchema, UserUpdateSchema } from '@/validators/user.validator';
-
-import getMe from '@/controllers/v1/user/get-me';
-import updateMe from '@/controllers/v1/user/put-update-me';
-import deleteMe from '@/controllers/v1/user/delete-me';
-import getUsers from '@/controllers/v1/user/get-users';
-import getUser from '@/controllers/v1/user/get-user';
-import deleteUser from '@/controllers/v1/user/delete-user';
+import {
+  deleteMe,
+  deleteUser,
+  getMe,
+  getUser,
+  getUsers,
+  updateMe,
+} from '@/controllers/v1/user.controller';
 
 const router = Router();
 

@@ -50,4 +50,8 @@ export const TokenService = {
   delete: async (token: string): Promise<void> => {
     await Token.deleteOne({ token });
   },
+
+  deleteByUserId: async (userId: Types.ObjectId | string): Promise<void> => {
+    await Token.deleteMany({ userId });
+  },
 };
