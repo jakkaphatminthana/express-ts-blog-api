@@ -1,5 +1,6 @@
 import { BlogDocument } from '@/models/blog';
-import { IResBlog } from '@/types/blog.types';
+import { IResBlog, IResBlogs } from '@/types/blog.types';
+import { Pagination } from '@/types/core.types';
 
 export const blogDto = (data: BlogDocument): IResBlog => {
   return {
@@ -19,4 +20,11 @@ export const blogDto = (data: BlogDocument): IResBlog => {
     commentsCount: data.commentsCount,
     status: data.status,
   };
+};
+
+export const blogsDto = (
+  data: BlogDocument[],
+  pagination: Pagination,
+): IResBlogs => {
+  return { data: data.map((i) => blogDto(i)), pagination };
 };

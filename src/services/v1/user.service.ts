@@ -47,7 +47,7 @@ export const UserService = {
       users,
       pagination: {
         page: Number(page),
-        pageSize: Number(page),
+        pageSize: Number(pageSize),
         total: total,
       },
     };

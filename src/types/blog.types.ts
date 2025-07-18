@@ -1,5 +1,7 @@
 import { Types } from 'mongoose';
+
 import { BLOG_STATUS } from '@/constants/enums';
+import { Pagination } from './core.types';
 
 export interface BlogBanner {
   publicId: Types.ObjectId | string;
@@ -19,4 +21,9 @@ export interface IResBlog {
   likesCount: number;
   commentsCount: number;
   status: BLOG_STATUS;
+}
+
+export interface IResBlogs {
+  data: IResBlog[];
+  pagination: Pagination;
 }

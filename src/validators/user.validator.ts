@@ -38,5 +38,5 @@ export const UserUpdateSchema = z.object({
 export type UserUpdateSchemaType = z.infer<typeof UserUpdateSchema>;
 
 // Get Users
-export const UsersSchema = PaginationSchema.extend({});
+export const UsersSchema = PaginationSchema;
 export type UsersSchemaType = z.infer<typeof UsersSchema>;
