@@ -18,12 +18,6 @@ const window = new JSDOM('').window;
 const purify = DOMPurify(window);
 
 export const BlogService = {
-  getById: async (
-    blogId: Types.ObjectId | string,
-  ): Promise<BlogDocument | null> => {
-    return await Blog.findById(blogId).select('-__v').exec();
-  },
-
   getAll: async (
     requestData: BlogsSchemaType,
   ): Promise<{ blogs: BlogDocument[]; pagination: Pagination }> => {
@@ -52,6 +46,19 @@ export const BlogService = {
         total: total,
       },
     };
+  },
+
+  getById: async (
+    blogId: Types.ObjectId | string,
+  ): Promise<BlogDocument | null> => {
+    return await Blog.findById(blogId).select('-__v').exec();
+  },
+
+  getBySlug: async (slug: string): Promise<BlogDocument | null> => {
+    return await Blog.findOne({ slug })
+      .select('-__v') // not select __v
+      .populate('author', '-updatedAt -createdAt -__v')
+      .exec();
   },
 
   create: async (

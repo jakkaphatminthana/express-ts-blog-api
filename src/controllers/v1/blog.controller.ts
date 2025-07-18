@@ -97,6 +97,39 @@ export const getBlogsByUser = async (
     res.status(200).json(blogsDto(listData.blogs, listData.pagination));
   } catch (error) {
     sendError.internalServer(res, error);
-    logger.error('Error while getBlogs, ', error);
+    logger.error('Error while getBlogsByUser, ', error);
+  }
+};
+
+export const getBlogBySlug = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userId = req.userId;
+    const slug = req.params.slug;
+
+    const user = await UserService.getUserById(userId as Types.ObjectId);
+    if (!user) {
+      sendError.unauthorized(res);
+      return;
+    }
+
+    const blog = await BlogService.getBySlug(slug);
+
+    if (!blog) {
+      sendError.notFound(res, 'Blog not found');
+      return;
+    }
+
+    if (user.role === USER_ROLE.User && blog.status === BLOG_STATUS.DRAFT) {
+      sendError.forbidden(res);
+      return;
+    }
+
+    res.status(200).json({ data: blogDto(blog) });
+  } catch (error) {
+    sendError.internalServer(res, error);
+    logger.error('Error while getBlogBySlug, ', error);
   }
 };

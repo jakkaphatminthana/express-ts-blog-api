@@ -10,6 +10,7 @@ import { USER_ROLE } from '@/constants/enums';
 import { BlogsSchema, CreateBlogSchema } from '@/validators/blog.validator';
 import {
   createBlog,
+  getBlogBySlug,
   getBlogs,
   getBlogsByUser,
 } from '@/controllers/v1/blog.controller';
@@ -42,6 +43,13 @@ router.get(
   authorize([USER_ROLE.Admin, USER_ROLE.User]),
   validationError(BlogsSchema, 'query'),
   getBlogsByUser,
+);
+
+router.get(
+  '/:slug',
+  authenticate,
+  authorize([USER_ROLE.Admin, USER_ROLE.User]),
+  getBlogBySlug,
 );
 
 export default router;
