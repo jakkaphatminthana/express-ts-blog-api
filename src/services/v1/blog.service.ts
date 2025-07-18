@@ -27,8 +27,10 @@ export const BlogService = {
   getAll: async (
     requestData: BlogsSchemaType,
   ): Promise<{ blogs: BlogDocument[]; pagination: Pagination }> => {
+    //filter
     const filter: Record<string, any> = {};
     if (requestData.status) filter.status = requestData.status;
+    if (requestData.author) filter.author = requestData.author;
 
     const page = requestData.page || PAGE;
     const pageSize = requestData.pageSize || PAGE_SIZE;

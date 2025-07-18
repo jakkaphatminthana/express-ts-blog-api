@@ -8,7 +8,11 @@ import { uploadBlogBanner } from '@/middlewares/upload-image';
 
 import { USER_ROLE } from '@/constants/enums';
 import { BlogsSchema, CreateBlogSchema } from '@/validators/blog.validator';
-import { createBlog, getBlogs } from '@/controllers/v1/blog.controller';
+import {
+  createBlog,
+  getBlogs,
+  getBlogsByUser,
+} from '@/controllers/v1/blog.controller';
 
 const upload = multer();
 
@@ -30,6 +34,14 @@ router.get(
   authorize([USER_ROLE.Admin, USER_ROLE.User]),
   validationError(BlogsSchema, 'query'),
   getBlogs,
+);
+
+router.get(
+  '/user/:userId',
+  authenticate,
+  authorize([USER_ROLE.Admin, USER_ROLE.User]),
+  validationError(BlogsSchema, 'query'),
+  getBlogsByUser,
 );
 
 export default router;

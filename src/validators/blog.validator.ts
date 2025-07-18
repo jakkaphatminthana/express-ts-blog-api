@@ -23,5 +23,6 @@ export const BlogsSchema = PaginationSchema.extend({
       message: `status must be one of ${Object.values(BLOG_STATUS).join(', ')}`,
     })
     .optional(),
+  author: z.string().optional(),
 });
 export type BlogsSchemaType = z.infer<typeof BlogsSchema>;

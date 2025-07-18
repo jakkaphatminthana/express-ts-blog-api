@@ -66,3 +66,37 @@ export const getBlogs = async (req: Request, res: Response): Promise<void> => {
     logger.error('Error while getBlogs, ', error);
   }
 };
+
+export const getBlogsByUser = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userId = req.params.userId;
+    const currentUserId = req.userId;
+    const query = req.query as BlogsSchemaType;
+
+    const currentUser = await UserService.getUserById(
+      currentUserId as Types.ObjectId,
+    );
+    if (!currentUser) {
+      sendError.unauthorized(res);
+      return;
+    }
+
+    // Show only the published blog for user
+    if (currentUser.role === USER_ROLE.User) {
+      query.status = BLOG_STATUS.PUBLISHED;
+    }
+
+    // Filter author
+    query.author = userId;
+
+    const listData = await BlogService.getAll(query);
+
+    res.status(200).json(blogsDto(listData.blogs, listData.pagination));
+  } catch (error) {
+    sendError.internalServer(res, error);
+    logger.error('Error while getBlogs, ', error);
+  }
+};
