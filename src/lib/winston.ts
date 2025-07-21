@@ -30,7 +30,7 @@ if (config.NODE_ENV !== 'production') {
 
 // instance logger winston
 const logger = winston.createLogger({
-  level: config.LOG_LEVEL || 'info',
+  level: 'info',
   format: combine(timestamp(), errors({ stack: true }), json()),
   transports,
   silent: config.NODE_ENV === 'test', //disable in test env
