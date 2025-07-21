@@ -4,7 +4,6 @@ import multer from 'multer';
 import authorize from '@/middlewares/authorize';
 import authenticate from '@/middlewares/authenticate';
 import validationError from '@/middlewares/validation-error';
-import { uploadBlogBanner } from '@/middlewares/upload-image';
 
 import { USER_ROLE } from '@/constants/enums';
 import {
@@ -19,6 +18,7 @@ import {
   getBlogsByUser,
   updateBlog,
 } from '@/controllers/v1/blog.controller';
+import { uploadToCloudinaryMiddleware } from '@/middlewares/upload-to-cloudinary';
 
 const upload = multer();
 
@@ -28,10 +28,20 @@ router.post(
   '/',
   authenticate,
   authorize([USER_ROLE.Admin]),
-  upload.single('banner_image'), // Must be placed before validationError
+  upload.single('banner_image'), // file upload
+  uploadToCloudinaryMiddleware('banner_image', 'blog/banner'),
   validationError(CreateBlogSchema, 'body'),
-  uploadBlogBanner('post'),
   createBlog,
+);
+
+router.put(
+  '/:blogId',
+  authenticate,
+  authorize([USER_ROLE.Admin]),
+  upload.single('banner_image'), // file upload
+  uploadToCloudinaryMiddleware('banner_image', 'blog/banner'),
+  validationError(UpdateBlogSchema, 'body'),
+  updateBlog,
 );
 
 router.get(
@@ -55,16 +65,6 @@ router.get(
   authenticate,
   authorize([USER_ROLE.Admin, USER_ROLE.User]),
   getBlogBySlug,
-);
-
-router.put(
-  '/:blogId',
-  authenticate,
-  authorize([USER_ROLE.Admin]),
-  upload.single('banner_image'), // Must be placed before validationError
-  validationError(UpdateBlogSchema, 'body'),
-  uploadBlogBanner('put'),
-  updateBlog,
 );
 
 export default router;

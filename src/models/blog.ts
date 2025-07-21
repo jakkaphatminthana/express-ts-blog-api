@@ -1,23 +1,17 @@
 import { model, Schema, Types, Document } from 'mongoose';
 import { BLOG_STATUS } from '@/constants/enums';
+import { BaseImage } from '@/types/core.types';
 
 export interface IBlog {
   title: string;
   slug: string;
   content: string;
-  banner: IBlogBanner;
+  banner: BaseImage;
   author: Types.ObjectId;
   viewsCount: number;
   likesCount: number;
   commentsCount: number;
   status: BLOG_STATUS;
-}
-
-export interface IBlogBanner {
-  publicId: string;
-  url: string;
-  width: number;
-  height: number;
 }
 
 export type BlogDocument = Document & IBlog;

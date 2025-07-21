@@ -1,15 +1,14 @@
 import { Types } from 'mongoose';
 
 import { BLOG_STATUS } from '@/constants/enums';
-import { Pagination } from './core.types';
-import { IBlogBanner } from '@/models/blog';
+import { BaseImage, Pagination } from './core.types';
 
 export interface IResBlog {
   id: Types.ObjectId | string;
   title: string;
   slug: string;
   content: string;
-  banner: IBlogBanner;
+  banner: BaseImage;
   author: Types.ObjectId | string;
   viewsCount: number;
   likesCount: number;

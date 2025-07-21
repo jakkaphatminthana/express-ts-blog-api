@@ -4,7 +4,7 @@ import { Types } from 'mongoose';
 
 import { generateSlug } from '@/utils';
 import { PAGE, PAGE_SIZE } from '@/constants';
-import { Pagination } from '@/types/core.types';
+import { BaseImage, Pagination } from '@/types/core.types';
 
 import {
   BlogsSchemaType,
@@ -12,7 +12,7 @@ import {
   UpdateBlogSchemaType,
 } from '@/validators/blog.validator';
 
-import Blog, { BlogDocument, IBlogBanner } from '@/models/blog';
+import Blog, { BlogDocument } from '@/models/blog';
 import { createError } from '@/types/core.error';
 import { BLOG_STATUS } from '@/constants/enums';
 import { logger } from '@/lib/winston';
@@ -38,7 +38,7 @@ export const BlogService = {
       .populate('author', '-updatedAt -createdAt -__v')
       .limit(pageSize)
       .skip((page - 1) * pageSize)
-      .sort({ createdAt: -1 }) //DESC
+      .sort({ publishedAt: -1 }) //DESC
       .exec();
 
     return {
@@ -67,7 +67,7 @@ export const BlogService = {
   create: async (
     userId: Types.ObjectId | string,
     requestData: CreateBlogSchemaType,
-    bannerImage: IBlogBanner,
+    bannerImage: BaseImage,
   ): Promise<BlogDocument> => {
     // clean content with <script>
     const cleanContent: string = purify.sanitize(requestData.content);
@@ -87,7 +87,7 @@ export const BlogService = {
   update: async (
     blogId: Types.ObjectId | string,
     requestData: UpdateBlogSchemaType,
-    bannerImage?: IBlogBanner,
+    bannerImage?: BaseImage,
   ): Promise<BlogDocument> => {
     const blog = await BlogService.getById(blogId);
     if (!blog) {
