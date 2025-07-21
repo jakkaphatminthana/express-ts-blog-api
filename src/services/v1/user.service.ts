@@ -14,6 +14,7 @@ import {
 import User, { IUser, UserDocument } from '@/models/user';
 
 import { TokenService } from '@/services/v1/token.service';
+import { BlogService } from '@/services/v1/blog.service';
 
 export const UserService = {
   getUserById: async (
@@ -106,5 +107,17 @@ export const UserService = {
     logger.info('Refresh tokens has been deleted', {
       userId,
     });
+
+    //delete blogs
+    const blogs = (await BlogService.getAll({ author: userId as string }))
+      .blogs;
+    if (blogs.length > 0) {
+      for (const blog of blogs) {
+        await BlogService.delete(blog._id as Types.ObjectId);
+      }
+      logger.info('User blogs has been deleted', {
+        userId,
+      });
+    }
   },
 };
