@@ -4,15 +4,18 @@ import { Types } from 'mongoose';
 
 import { generateSlug } from '@/utils';
 import { PAGE, PAGE_SIZE } from '@/constants';
-import { BlogBanner } from '@/types/blog.types';
 import { Pagination } from '@/types/core.types';
 
 import {
   BlogsSchemaType,
   CreateBlogSchemaType,
+  UpdateBlogSchemaType,
 } from '@/validators/blog.validator';
 
-import Blog, { BlogDocument } from '@/models/blog';
+import Blog, { BlogDocument, IBlogBanner } from '@/models/blog';
+import { createError } from '@/types/core.error';
+import { BLOG_STATUS } from '@/constants/enums';
+import { logger } from '@/lib/winston';
 
 const window = new JSDOM('').window;
 const purify = DOMPurify(window);
@@ -64,7 +67,7 @@ export const BlogService = {
   create: async (
     userId: Types.ObjectId | string,
     requestData: CreateBlogSchemaType,
-    bannerImage: BlogBanner,
+    bannerImage: IBlogBanner,
   ): Promise<BlogDocument> => {
     // clean content with <script>
     const cleanContent: string = purify.sanitize(requestData.content);
@@ -79,5 +82,30 @@ export const BlogService = {
       status: requestData.status,
       author: userId,
     });
+  },
+
+  update: async (
+    blogId: Types.ObjectId | string,
+    requestData: UpdateBlogSchemaType,
+    bannerImage?: IBlogBanner,
+  ): Promise<BlogDocument> => {
+    const blog = await BlogService.getById(blogId);
+    if (!blog) {
+      throw createError.notFound('Blog not found');
+    }
+
+    if (requestData.title) blog.title = requestData.title;
+    if (requestData.content) {
+      // clean content with <script>
+      const cleanContent: string = purify.sanitize(requestData.content);
+      blog.content = cleanContent;
+    }
+    if (requestData.status) blog.status = requestData.status as BLOG_STATUS;
+    if (bannerImage) blog.banner = bannerImage;
+
+    await blog.save();
+    logger.info('Blgo updated: ', blog);
+
+    return blog;
   },
 };

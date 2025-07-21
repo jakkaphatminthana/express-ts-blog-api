@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { UploadApiErrorResponse } from 'cloudinary';
 
+import { MAX_FILE_SIZE } from '@/constants';
 import uploadToCloudinary from '@/lib/cloudinary';
 import { logger } from '@/lib/winston';
-import { MAX_FILE_SIZE } from '@/constants';
-
 import { sendError } from '@/utils/http-error';
-import { BlogBanner } from '@/types/blog.types';
+
+import { BlogService } from '@/services/v1/blog.service';
+import { IBlogBanner } from '@/models/blog';
 
 export const uploadBlogBanner = (method: 'post' | 'put') => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -29,16 +30,12 @@ export const uploadBlogBanner = (method: 'post' | 'put') => {
     }
 
     try {
-      //   const { blogId } = req.params;
-      //   const blog = await BlogService.getById(blogId);
-      //   if (!blog) {
-      //     sendError.badRequest(res, 'Blog not found');
-      //     return;
-      //   }
+      const { blogId } = req.params;
+      const blog = await BlogService.getById(blogId);
 
       const data = await uploadToCloudinary(
         req.file.buffer,
-        // blog?.banner.publicId.replace('express-ts-blog/', ''),
+        blog?.banner?.publicId?.replace('express-ts-blog/', ''),
       );
 
       if (!data) {
@@ -47,7 +44,7 @@ export const uploadBlogBanner = (method: 'post' | 'put') => {
         return;
       }
 
-      const newBanner: BlogBanner = {
+      const newBanner: IBlogBanner = {
         publicId: data.public_id,
         url: data.secure_url,
         width: data.width,

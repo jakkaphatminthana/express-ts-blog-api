@@ -42,6 +42,46 @@ export const createBlog = async (
   }
 };
 
+export const updateBlog = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userId = req.userId;
+    const blogId = req.params.blogId;
+
+    const body = req.body as CreateBlogSchemaType;
+
+    const user = await UserService.getUserById(userId as Types.ObjectId);
+    const blog = await BlogService.getById(blogId);
+
+    // check blog
+    if (!blog) {
+      sendError.notFound(res, 'Blog not found');
+      return;
+    }
+
+    // check owner blog
+    if (!blog.author._id.equals(userId) || user?.role !== USER_ROLE.Admin) {
+      sendError.forbidden(res);
+      logger.warn('A user tried to update a blog without permission');
+      return;
+    }
+
+    // update
+    const updatedData = await BlogService.update(
+      blogId,
+      body,
+      req.body?.banner_image,
+    );
+
+    res.status(200).json({ data: blogDto(updatedData) });
+  } catch (error) {
+    sendError.internalServer(res, error);
+    logger.error('Error while updateBlog, ', error);
+  }
+};
+
 export const getBlogs = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = req.userId;

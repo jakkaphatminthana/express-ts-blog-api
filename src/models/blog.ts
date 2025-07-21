@@ -5,17 +5,19 @@ export interface IBlog {
   title: string;
   slug: string;
   content: string;
-  banner: {
-    publicId: string;
-    url: string;
-    width: number;
-    height: number;
-  };
+  banner: IBlogBanner;
   author: Types.ObjectId;
   viewsCount: number;
   likesCount: number;
   commentsCount: number;
   status: BLOG_STATUS;
+}
+
+export interface IBlogBanner {
+  publicId: string;
+  url: string;
+  width: number;
+  height: number;
 }
 
 export type BlogDocument = Document & IBlog;
