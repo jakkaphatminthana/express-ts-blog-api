@@ -1,6 +1,7 @@
 import DOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
 import { Types } from 'mongoose';
+import { v2 as cloudinary } from 'cloudinary';
 
 import { generateSlug } from '@/utils';
 import { PAGE, PAGE_SIZE } from '@/constants';
@@ -107,5 +108,24 @@ export const BlogService = {
     logger.info('Blgo updated: ', blog);
 
     return blog;
+  },
+
+  delete: async (blogId: Types.ObjectId | string): Promise<void> => {
+    const blog = await BlogService.getById(blogId);
+    if (!blog) {
+      throw createError.notFound('Blog not found');
+    }
+
+    // delete blog
+    await blog.deleteOne({ _id: blogId });
+    logger.info('Blog delete successful', { blogId });
+
+    // delete image on Cloudinary
+    if (blog.banner?.publicId) {
+      await cloudinary.uploader.destroy(blog.banner.publicId);
+      logger.info('Blog banner deleted from Cloudinary', {
+        publicId: blog.banner.publicId,
+      });
+    }
   },
 };

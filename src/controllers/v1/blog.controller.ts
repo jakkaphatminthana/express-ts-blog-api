@@ -9,6 +9,7 @@ import { blogDto, blogsDto } from '@/dtos/blog.dto';
 import {
   BlogsSchemaType,
   CreateBlogSchemaType,
+  UpdateBlogSchemaType,
 } from '@/validators/blog.validator';
 
 import { BlogService } from '@/services/v1/blog.service';
@@ -50,7 +51,7 @@ export const updateBlog = async (
     const userId = req.userId;
     const blogId = req.params.blogId;
 
-    const body = req.body as CreateBlogSchemaType;
+    const body = req.body as UpdateBlogSchemaType;
 
     const user = await UserService.getUserById(userId as Types.ObjectId);
     const blog = await BlogService.getById(blogId);
@@ -76,6 +77,37 @@ export const updateBlog = async (
     );
 
     res.status(200).json({ data: blogDto(updatedData) });
+  } catch (error) {
+    sendError.internalServer(res, error);
+    logger.error('Error while updateBlog, ', error);
+  }
+};
+
+export const delteBlog = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = req.userId;
+    const blogId = req.params.blogId;
+
+    const user = await UserService.getUserById(userId as Types.ObjectId);
+    const blog = await BlogService.getById(blogId);
+
+    // check blog
+    if (!blog) {
+      sendError.notFound(res, 'Blog not found');
+      return;
+    }
+
+    // check owner blog
+    if (!blog.author._id.equals(userId) || user?.role !== USER_ROLE.Admin) {
+      sendError.forbidden(res);
+      logger.warn('A user tried to delte a blog without permission');
+      return;
+    }
+
+    // deleting
+    await BlogService.delete(blogId);
+
+    res.status(200).json({ message: 'Delete blog successful' });
   } catch (error) {
     sendError.internalServer(res, error);
     logger.error('Error while updateBlog, ', error);

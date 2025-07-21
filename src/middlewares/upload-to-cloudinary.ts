@@ -8,11 +8,6 @@ import { BaseImage } from '@/types/core.types';
 import { sendError } from '@/utils/http-error';
 import { MAX_FILE_SIZE } from '@/constants';
 
-interface Prop {
-  fieldName: string;
-  publicIdPrefix?: string;
-}
-
 export const uploadToCloudinaryMiddleware = (
   fieldName: string,
   publicIdPrefix?: string,

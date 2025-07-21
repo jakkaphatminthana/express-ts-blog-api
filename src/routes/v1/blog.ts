@@ -7,12 +7,14 @@ import validationError from '@/middlewares/validation-error';
 
 import { USER_ROLE } from '@/constants/enums';
 import {
+  BlogIdParamSchema,
   BlogsSchema,
   CreateBlogSchema,
   UpdateBlogSchema,
 } from '@/validators/blog.validator';
 import {
   createBlog,
+  delteBlog,
   getBlogBySlug,
   getBlogs,
   getBlogsByUser,
@@ -39,9 +41,17 @@ router.put(
   authenticate,
   authorize([USER_ROLE.Admin]),
   upload.single('banner_image'), // file upload
-  uploadToCloudinaryMiddleware('banner_image', 'blog/banner'),
+  uploadToCloudinaryMiddleware('banner_image', 'blog/banner', false),
   validationError(UpdateBlogSchema, 'body'),
   updateBlog,
+);
+
+router.delete(
+  '/:blogId',
+  authenticate,
+  authorize([USER_ROLE.Admin]),
+  validationError(BlogIdParamSchema, 'params'),
+  delteBlog,
 );
 
 router.get(

@@ -2,6 +2,11 @@ import z from 'zod';
 import { BLOG_STATUS } from '@/constants/enums';
 import { PaginationSchema } from './core.validator';
 
+export const BlogIdParamSchema = z.object({
+  blogId: z.string({ message: 'blogId is required' }),
+});
+export type BlogIdParamSchemaType = z.infer<typeof BlogIdParamSchema>;
+
 // Get all
 export const BlogsSchema = PaginationSchema.extend({
   status: z
@@ -28,7 +33,6 @@ export const CreateBlogSchema = z.object({
 export type CreateBlogSchemaType = z.infer<typeof CreateBlogSchema>;
 
 // Update
-// Create
 export const UpdateBlogSchema = z.object({
   title: z
     .string()
