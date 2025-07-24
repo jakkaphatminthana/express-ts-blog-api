@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { Types } from 'mongoose';
 
 import { logger } from '@/lib/winston';
-import { fetchOrePrice } from '@/lib/goldapi';
+import { fetchAllOrePrices, fetchOrePrice } from '@/lib/goldapi';
 
 import { CURRENCY, ORE_NAME } from '@/constants/enums';
 import { sendError } from '@/utils/http-error';
@@ -30,6 +30,22 @@ export const getOrePrice = async (
     res.status(200).json({ data: data });
   } catch (error) {
     sendError.internalServer(res, error);
-    logger.error('Error while getMatalPrice, ', error);
+    logger.error('Error while getOrePrice, ', error);
+  }
+};
+
+export const getAllOrePrices = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const query = req.query as TradeOrePriceQuerySchemaType;
+    const currency = query.currency as CURRENCY | undefined;
+
+    const data = await fetchAllOrePrices(currency);
+    res.status(200).json({ data: data });
+  } catch (error) {
+    sendError.internalServer(res, error);
+    logger.error('Error while getOrePrice, ', error);
   }
 };

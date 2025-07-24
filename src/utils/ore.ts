@@ -1,7 +1,13 @@
-import { ORE_NAME, ORE_SYMBOL } from '@/constants/enums';
+import { CURRENCY, ORE_NAME, ORE_SYMBOL } from '@/constants/enums';
 
 export const OreNameToSymbolMap: Record<ORE_NAME, ORE_SYMBOL> = {
   [ORE_NAME.GOLD]: ORE_SYMBOL.GOLD,
   [ORE_NAME.SILVER]: ORE_SYMBOL.SILVER,
   [ORE_NAME.PLATINUM]: ORE_SYMBOL.PLATINUM,
+};
+
+export const OreDefaultCurrencyMap: Record<ORE_SYMBOL, CURRENCY> = {
+  [ORE_SYMBOL.GOLD]: CURRENCY.THB,
+  [ORE_SYMBOL.SILVER]: CURRENCY.THB,
+  [ORE_SYMBOL.PLATINUM]: CURRENCY.USD,
 };

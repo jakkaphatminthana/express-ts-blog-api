@@ -5,7 +5,10 @@ import authenticate from '@/middlewares/authenticate';
 import validationError from '@/middlewares/validation-error';
 
 import { USER_ROLE } from '@/constants/enums';
-import { getOrePrice } from '@/controllers/v1/trade.controller';
+import {
+  getAllOrePrices,
+  getOrePrice,
+} from '@/controllers/v1/trade.controller';
 import {
   TradeOrePriceParamsSchema,
   TradeOrePriceQuerySchema,
@@ -18,6 +21,12 @@ router.get(
   validationError(TradeOrePriceParamsSchema, 'params'),
   validationError(TradeOrePriceQuerySchema, 'query'),
   getOrePrice,
+);
+
+router.get(
+  '/price',
+  validationError(TradeOrePriceQuerySchema, 'query'),
+  getAllOrePrices,
 );
 
 export default router;
