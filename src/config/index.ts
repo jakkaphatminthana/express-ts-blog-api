@@ -18,6 +18,8 @@ const config = {
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET!,
   GOLDAPI_API_KEY: process.env.GOLDAPI_API_KEY!,
   GOLDAPI_BASE_URL: process.env.GOLDAPI_BASE_URL!,
+  EXCHANGE_RATE_BASE_URL: process.env.EXCHANGE_RATE_BASE_URL!,
+  EXCHANGE_RATE_API_KEY: process.env.EXCHANGE_RATE_API_KEY!,
 };
 
 export default config;
