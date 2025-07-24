@@ -16,6 +16,8 @@ const config = {
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME!,
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY!,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET!,
+  GOLDAPI_API_KEY: process.env.GOLDAPI_API_KEY!,
+  GOLDAPI_BASE_URL: process.env.GOLDAPI_BASE_URL!,
 };
 
 export default config;
