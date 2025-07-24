@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 import config from '@/config';
-import { ORE_TYPE, CURRENCY } from '@/constants/enums';
+import { ORE_SYMBOL, CURRENCY } from '@/constants/enums';
 
 export const fetchOrePrice = async (
-  type: ORE_TYPE,
+  type: ORE_SYMBOL,
   currency: CURRENCY = CURRENCY.THB,
 ) => {
   const BASE_URL = config.GOLDAPI_BASE_URL;

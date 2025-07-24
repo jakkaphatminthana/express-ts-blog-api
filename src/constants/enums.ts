@@ -8,10 +8,16 @@ export enum BLOG_STATUS {
   PUBLISHED = 'published',
 }
 
-export enum ORE_TYPE {
+export enum ORE_SYMBOL {
   GOLD = 'XAU',
   SILVER = 'XAG',
   PLATINUM = 'XPT',
+}
+
+export enum ORE_NAME {
+  GOLD = 'gold',
+  SILVER = 'silver',
+  PLATINUM = 'platinum',
 }
 
 export enum CURRENCY {

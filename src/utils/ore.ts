@@ -1,0 +1,7 @@
+import { ORE_NAME, ORE_SYMBOL } from '@/constants/enums';
+
+export const OreNameToSymbolMap: Record<ORE_NAME, ORE_SYMBOL> = {
+  [ORE_NAME.GOLD]: ORE_SYMBOL.GOLD,
+  [ORE_NAME.SILVER]: ORE_SYMBOL.SILVER,
+  [ORE_NAME.PLATINUM]: ORE_SYMBOL.PLATINUM,
+};
